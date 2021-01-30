@@ -23,13 +23,13 @@ default: &default
 
 development:
   <<: *default
-  database: style_inventory_development
+  database: pole_app_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-  #username: style_inventory
+  #username: pole_app
 
   # The password associated with the postgres role (username).
   #password:
@@ -57,7 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: style_inventory_test
+  database: pole_app_test
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: style_inventory_production
-  username: style_inventory
-  password: <%= ENV['STYLE_INVENTORY_DATABASE_PASSWORD'] %>
+  database: pole_app_production
+  username: pole_app
+  password: <%= ENV['POLE_APP_DATABASE_PASSWORD'] %>

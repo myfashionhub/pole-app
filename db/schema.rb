@@ -10,30 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_02_015748) do
+ActiveRecord::Schema.define(version: 2021_01_30_205847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "items", force: :cascade do |t|
-    t.string "name"
-    t.decimal "price"
-    t.string "brand"
-    t.integer "store_id"
-    t.integer "price_range"
-    t.integer "clothing_category"
-    t.integer "weather_category"
-    t.integer "utility_category"
-    t.integer "wear_frequency"
-    t.integer "discard_reason"
-    t.date "date_purchased"
-    t.date "date_discarded"
+  create_table "history", force: :cascade do |t|
+    t.string "description"
+    t.integer "user_id"
+    t.integer "pole_move_id"
+    t.date "practiced"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "stores", force: :cascade do |t|
+  create_table "pole_moves", force: :cascade do |t|
     t.string "name"
+    t.string "description"
+    t.string "aliases"
+    t.string "pole_modes"
+    t.string "level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "pole_move_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "stage_name"
+    t.string "email"
+    t.string "hashed_password"
+    t.string "biography"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
