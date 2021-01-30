@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root 'base#index'
 
-  get 'stats'        => 'stats#index'
-  post 'items'       => 'items#create'
+  resources :users, only: [:show, :create]
+  resources :pole_moves, only: [:index, :show, :create]
+  resources :history, only: [:index, :create]
+  resources :tags, only: [:index, :create]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
