@@ -5,15 +5,6 @@ import ajax from '../ajax';
 class User extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      user: {
-        name: null,
-        stage_name: '',
-        email: '',
-        biography: null,
-      },
-    };
   }
 
   /*-- Helpers --*/
@@ -27,20 +18,22 @@ class User extends React.Component {
   async findOrCreateUser() {
     const response = await ajax.post('/users', this.state.user);
     if (response.user) {
-      window.location.replace('/pole-tricks');
+      window.location.replace('/pole-moves');
     }
   }
 
   render() {
-    const user = this.state.user;
+    const poleMoves = this.props.poleMoves;
     return (
       <React.Fragment>
-        <label>Stage name</label>
-        <input value={user.stage_name} onChange={(e) => this.onInputChange('stage_name', e)} />
-        <label>Email</label>
-        <input value={user.email} onChange={(e) => this.onInputChange('email', e)} />
-
-        <button onClick={() => this.findOrCreateUser()}>Sign up/Log in</button>
+      <ul>
+        {poleMoves.map((move) => {
+          <li>
+            <h4>{move.name}</h4>
+            <p>{move.description}</p>
+          </li>
+        })}
+      </ul>
       </React.Fragment>
     );
   }
