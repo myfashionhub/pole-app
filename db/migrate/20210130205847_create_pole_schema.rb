@@ -15,13 +15,14 @@ class CreatePoleSchema < ActiveRecord::Migration[5.2]
       t.string :aliases
       t.string :pole_modes
       t.string :level
+      t.string :image_url
+      t.string :video_url
       t.timestamps
     end
 
     create_table :tags do |t|
       t.string :name
       t.string :description
-      t.integer :pole_move_id
     end
 
     create_table :history do |t|
@@ -30,6 +31,12 @@ class CreatePoleSchema < ActiveRecord::Migration[5.2]
       t.integer :pole_move_id
       t.date :practiced
 
+      t.timestamps
+    end
+
+    create_table :tags_pole_moves do |t|
+      t.integer :tag_id
+      t.integer :pole_move_id
       t.timestamps
     end
   end

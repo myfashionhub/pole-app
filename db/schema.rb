@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 2021_01_30_205847) do
     t.string "aliases"
     t.string "pole_modes"
     t.string "level"
+    t.string "image_url"
+    t.string "video_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -37,7 +39,13 @@ ActiveRecord::Schema.define(version: 2021_01_30_205847) do
   create_table "tags", force: :cascade do |t|
     t.string "name"
     t.string "description"
+  end
+
+  create_table "tags_pole_moves", force: :cascade do |t|
+    t.integer "tag_id"
     t.integer "pole_move_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
