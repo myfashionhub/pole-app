@@ -1,6 +1,7 @@
 import React from 'react';
 
 import ajax from '../ajax';
+import { Tags } from './Tags';
 
 class User extends React.Component {
   constructor(props) {
@@ -8,6 +9,8 @@ class User extends React.Component {
 
     this.state = {
       searchTerm: '',
+      poleMoves: [],
+      tagMap: {},
     }
   }
 
@@ -20,25 +23,30 @@ class User extends React.Component {
     }
   }
 
+  getMode(pole_modes) {
+    if (pole_modes == 'spin_static') {
+      return 'Spin or static';
+    } else {
+      return pole_modes.charAt(0).toUpperCase() + pole_modes.slice(1)
+    }
+  }
+
   /*-- API functions --*/
   async searchPoleMoves(e) {
     const response = await ajax.get('/pole_moves/search', { searchTerm: this.state.searchTerm });
-    console.warn(response);
+
+    const tagMap = {};
+    response.tags.forEach((tag) => tagMap[tag.id] = tag.name);
+
+    this.setState({
+      poleMoves: response.poleMoves,
+      tagMap,
+    });
   }
 
   render() {
-    const poleMoves = this.props.poleMoves;
-    return (
-      <React.Fragment>
-      <ul>
-        {poleMoves.map((move) => {
-          <li>
-            <h4>{move.name}</h4>
-            <p>{move.description}</p>
-          </li>
-        })}
-      </ul>
-
+    const poleMoves = this.state.poleMoves;
+    return (<React.Fragment>
       <h3>Find a trick</h3>
       <input
         value={this.state.searchTerm}
@@ -46,8 +54,23 @@ class User extends React.Component {
         onKeyPress={(e) => this.onInputChange(e)}
         placeholder="Type search term and hit 'Enter'"
       />
-      </React.Fragment>
-    );
+
+      <ul>
+        {poleMoves.map((move, index) => (
+          <li key={index}>
+            <h4>{move.name}</h4>
+            <p>{move.description}</p>
+            <span>{move.level}</span>
+            <span>{this.getMode(move.pole_modes)}</span>
+
+            <Tags
+              tagMap={this.state.tagMap}
+              tagIds={move.tag_ids}
+            />
+          </li>
+        ))}
+      </ul>
+    </React.Fragment>);
   }
 }
 
