@@ -11,11 +11,13 @@ class AjaxService {
   }
 
   async get(path, params) {
-    const response = await fetch(path, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
-      ...this.options,
-      body: JSON.stringify(params),
-    });
+    const response = await fetch(
+      `${path}?${new URLSearchParams(params)}`,
+      {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        ...this.options,
+      }
+    );
 
     return response.json();
   }

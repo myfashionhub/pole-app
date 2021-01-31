@@ -5,21 +5,25 @@ import ajax from '../ajax';
 class User extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      searchTerm: '',
+    }
   }
 
   /*-- Helpers --*/
-  onInputChange(key, e) {
-    const user = { ...this.state.user };
-    user[key] = e.target.value;
-    this.setState({ user });
+  onInputChange(e) {
+    if (e.code === 'Enter') {
+      this.searchPoleMoves();
+    } else {
+      this.setState({ searchTerm: e.target.value });
+    }
   }
 
   /*-- API functions --*/
-  async findOrCreateUser() {
-    const response = await ajax.post('/users', this.state.user);
-    if (response.user) {
-      window.location.replace('/pole-moves');
-    }
+  async searchPoleMoves(e) {
+    const response = await ajax.get('/pole_moves/search', { searchTerm: this.state.searchTerm });
+    console.warn(response);
   }
 
   render() {
@@ -34,6 +38,14 @@ class User extends React.Component {
           </li>
         })}
       </ul>
+
+      <h3>Find a trick</h3>
+      <input
+        value={this.state.searchTerm}
+        onChange={(e) => this.onInputChange(e)}
+        onKeyPress={(e) => this.onInputChange(e)}
+        placeholder="Type search term and hit 'Enter'"
+      />
       </React.Fragment>
     );
   }

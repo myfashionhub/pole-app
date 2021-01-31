@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   root 'base#index'
 
   get '/login' => 'users#show'
-  get '/pole-moves' => 'pole_moves#index'
+  get '/pole-tricks' => 'pole_moves#index'
+  get '/pole_moves/search' => 'pole_moves#search'
 
   resources :users, only: [:show, :create]
   resources :pole_moves, only: [:show, :create]
