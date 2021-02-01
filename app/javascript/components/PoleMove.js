@@ -11,7 +11,8 @@ class User extends React.Component {
       searchTerm: '',
       poleMoves: [],
       tagMap: {},
-    }
+      user: document.cookie.split('=')[1],
+    };
   }
 
   /*-- Helpers --*/
@@ -47,6 +48,8 @@ class User extends React.Component {
   render() {
     const poleMoves = this.state.poleMoves;
     return (<React.Fragment>
+      <header>Hi {this.state.user}</header>
+
       <h3>Find a trick</h3>
       <input
         value={this.state.searchTerm}

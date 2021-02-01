@@ -4,6 +4,8 @@ class TagPoleMove < ApplicationRecord
   belongs_to :pole_move
   belongs_to :tag
 
+  validates :pole_move_id, uniqueness: { scope: :tag_id }
+
   def find_or_create_by(params)
     tag_pole_move = TagPoleMove.find_by(params)
 

@@ -26,7 +26,9 @@ class User extends React.Component {
   /*-- API functions --*/
   async findOrCreateUser() {
     const response = await ajax.post('/users', this.state.user);
-    if (response.user) {
+    const { user } = response;
+    if (user) {
+      document.cookie = `user=${user.stage_name || user.email}`;
       window.location.replace('/pole-tricks');
     }
   }

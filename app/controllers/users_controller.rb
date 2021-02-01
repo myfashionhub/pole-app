@@ -16,7 +16,7 @@ class UsersController < ApplicationController
       user.save
     end
 
-    session[:user_id] = user.id
+    # session[:user_id] = user.id
     respond_to do |format|
       format.json { render json: { user: user }}
     end

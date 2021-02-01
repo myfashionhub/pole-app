@@ -15,13 +15,13 @@ namespace :seed do
 end
 
 def parse_pole_move(row)
-  puts row
   pole_modes = row[1] == 'Both' ? 'spin_static' : row[1].downcase
 
+  puts "pole_modes #{pole_modes}, #{row[3].downcase}"
   pole_move = PoleMove.find_or_create_by(
     name: row[0],
     pole_modes: pole_modes,
-    level: row[3].downcase,
+    level: row[3].downcase
   )
   puts pole_move.attributes
 
@@ -29,7 +29,7 @@ def parse_pole_move(row)
   tag_names.each do |tag_name|
     puts "tag_name #{tag_name.inspect}"
     tag = Tag.find_by(name: tag_name)
-    join = TagPoleMove.create(
+    join = TagPoleMove.find_or_create_by(
       tag_id: tag.id,
       pole_move_id: pole_move.id,
     )
