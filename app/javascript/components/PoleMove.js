@@ -1,7 +1,10 @@
 import React from 'react';
 
 import ajax from '../ajax';
-import { Tags } from './Tags';
+import { capitalize } from '../utils';
+
+import { Header } from './Header';
+import { PoleMoveList } from './PoleMoveList';
 
 class User extends React.Component {
   constructor(props) {
@@ -9,10 +12,13 @@ class User extends React.Component {
 
     this.state = {
       searchTerm: '',
-      poleMoves: [],
+      searchResults: [],
+      userMoves: [],
       tagMap: {},
-      user: document.cookie.split('=')[1],
+      user: JSON.parse(window.localStorage.user || '{}'),
     };
+
+    this.getMoves();
   }
 
   /*-- Helpers --*/
@@ -24,14 +30,6 @@ class User extends React.Component {
     }
   }
 
-  getMode(pole_modes) {
-    if (pole_modes == 'spin_static') {
-      return 'Spin or static';
-    } else {
-      return pole_modes.charAt(0).toUpperCase() + pole_modes.slice(1)
-    }
-  }
-
   /*-- API functions --*/
   async searchPoleMoves(e) {
     const response = await ajax.get('/pole_moves/search', { searchTerm: this.state.searchTerm });
@@ -40,15 +38,28 @@ class User extends React.Component {
     response.tags.forEach((tag) => tagMap[tag.id] = tag.name);
 
     this.setState({
-      poleMoves: response.poleMoves,
+      searchResults: response.poleMoves,
       tagMap,
     });
   }
 
+  async saveMove(moveId) {
+    const resp = await ajax.post(`/users/${this.state.user.id}/moves`, { move_id: moveId });
+    if (resp.history) {
+      window.alert('Move successfully saved');
+    }
+  }
+
+  async getMoves() {
+    const resp = await ajax.get(`/users/${this.state.user.id}/moves`);
+    if (resp.pole_moves) {
+      this.setState({ userMoves: resp.pole_moves });
+    }
+  }
+
   render() {
-    const poleMoves = this.state.poleMoves;
-    return (<React.Fragment>
-      <header>Hi {this.state.user}</header>
+    return (<div className="page-container">
+      <Header title="Your tricks" />
 
       <h3>Find a trick</h3>
       <input
@@ -58,22 +69,15 @@ class User extends React.Component {
         placeholder="Type search term and hit 'Enter'"
       />
 
-      <ul>
-        {poleMoves.map((move, index) => (
-          <li key={index}>
-            <h4>{move.name}</h4>
-            <p>{move.description}</p>
-            <span>{move.level}</span>
-            <span>{this.getMode(move.pole_modes)}</span>
-
-            <Tags
-              tagMap={this.state.tagMap}
-              tagIds={move.tag_ids}
-            />
-          </li>
-        ))}
-      </ul>
-    </React.Fragment>);
+      <PoleMoveList
+        poleMoves={this.state.searchResults}
+        tagMap={this.state.tagMap}
+      />
+      <PoleMoveList
+        poleMoves={this.state.userMoves}
+        tagMap={this.state.tagMap}
+      />
+    </div>);
   }
 }
 

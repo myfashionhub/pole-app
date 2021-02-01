@@ -18,13 +18,7 @@ class PoleMovesController < ApplicationController
 
   def search
     pole_moves = PoleMove.where('name iLIKE ?', "%#{params[:searchTerm]}%")
-    pole_move_data = pole_moves.map do |pole_move|
-      tag_joins = TagPoleMove.where(pole_move_id: pole_move.id)
-
-      data = pole_move.attributes
-      data[:tag_ids] = tag_joins.map { |j| j.tag_id }.uniq
-      data
-    end
+    pole_move_data = PoleMove.get_moves_with_tags(pole_moves)
 
     respond_to do |format|
       format.json { render json: { poleMoves: pole_move_data, tags: Tag.all }}

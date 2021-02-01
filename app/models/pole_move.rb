@@ -12,4 +12,14 @@ class PoleMove < ApplicationRecord
 
     pole_move
   end
+
+  def self.get_moves_with_tags(pole_moves)
+    pole_moves.map do |pole_move|
+      tag_joins = TagPoleMove.where(pole_move_id: pole_move.id)
+
+      data = pole_move.attributes
+      data[:tag_ids] = tag_joins.map { |j| j.tag_id }.uniq
+      data
+    end
+  end
 end

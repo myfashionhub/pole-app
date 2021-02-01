@@ -28,7 +28,7 @@ class User extends React.Component {
     const response = await ajax.post('/users', this.state.user);
     const { user } = response;
     if (user) {
-      document.cookie = `user=${user.stage_name || user.email}`;
+      window.localStorage.user = JSON.stringify(user);
       window.location.replace('/pole-tricks');
     }
   }
